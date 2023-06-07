@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <title>Aplikacioni i Motit</title>
+  </head>
+  <style>
+    .container {
+      width: 600px;
+      height: 600px;
+      background-color: black;
+      margin: 20px auto;
+      border: 3px solid rgb(25, 223, 25);
+      border-radius: 30px;
+      color: rgb(25, 223, 25);
+      /* font-family: "Rubik Vinyl", cursive; */
+      font-family: "Libre Barcode 39 Text", cursive;
+      font-family: "Rubik Vinyl", cursive;
+      font-family: "Six Caps", sans-serif;
+      text-align: center;
+    }
+    #qyteti {
+      background-color: #161616 !important;
+      color: rgb(25, 223, 25);
+      width: 400px;
+      border: 4px solid black;
+      border-radius: 30px;
+      height: 30px;
+      padding-left: 20px;
+    }
+    .text {
+      background-color: black;
+      /* border: 2px solid rgb(25, 223, 25); */
+      border-radius: 50px;
+      /* font-family: "Press Start 2P", cursive; */
+      /* font-family: "Foldit", cursive; */
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      background-color: rgba(0, 0, 0, 0.822);
+      font-family: cursive;
+      text-transform: uppercase;
+    }
+    #qytetiEmri {
+      font-family: cursive;
+      font-size: 60px;
+    }
+    #temp {
+      font-family: cursive;
+      font-size: 60px;
+    }
+    h2 {
+      font-family: cursive;
+    }
+    #shikoje {
+      background-color: black;
+      color: rgb(25, 223, 25);
+      border: 2px solid rgb(25, 223, 25);
+      border-radius: 50px;
+      font-family: "Rubik Wet Paint", cursive;
+      display: block;
+      cursor: pointer;
+      width: 100px;
+      height: 100px;
+      margin-left: 250px;
+      margin-top: 20px;
+    }
+    #shikoje:hover {
+      background-color: rgb(25, 223, 25);
+      color: black;
+    }
+    .h22{
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .emri{
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .temperaturaa{
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <h1 class="text">Shikimi i motit</h1>
+      <marquee id="qytetiEmri" class="emri">Prishtina</marquee>
+      <marquee id="temp" class="temperaturaa">33°C</marquee>
+      <form id="input">
+        <h2 class="h22">Shkruani emrin e qytetit</h2>
+        <input type="text" id="qyteti" placeholder="Shkruaj" />
+        <input type="submit" id="shikoje" value="Shikoje" />
+      </form>
+    </div>
+    <script>
+      const input = document.getElementById("input");
+      const qyteti = document.getElementById("qyteti");
+      const qytetiEmri = document.getElementById("qytetiEmri");
+      const pershkrimi = document.getElementById("pershkrimi");
+      const temperatura = document.getElementById("temp");
+      const main = document.getElementById("main");
+
+      input.onsubmit = (asd) => {
+        asd.preventDefault();
+        ndryshimiMotit(qyteti.value);
+        qyteti.value = "";
+      };
+
+      ndryshimiMotit = (qyteti) => {
+        const dr = new XMLHttpRequest();
+        dr.open(
+          "GET",
+          `https://api.openweathermap.org/data/2.5/weather?q=${qyteti}&appid=cad7ec124945dcfff04e457e76760d90`
+        );
+        dr.send();
+        dr.onload = () => {
+          if (dr.status === 404) {
+            alert("Vendi nuk eshte gjendur");
+          } else {
+            let teDhenat = JSON.parse(dr.response);
+            qytetiEmri.innerHTML = teDhenat.name;
+            temperatura.innerHTML = `${Math.round(
+              teDhenat.main.temp - 273.15
+            )}°C`;
+            pershkrimi.innerHTML = teDhenat.weather[0].description;
+          }
+        };
+      };
+      ndryshimiMotit("Prishtina");
+    </script>
+  </body>
+</html>
